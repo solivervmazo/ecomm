@@ -13,7 +13,7 @@
           </thead>
           <tbody>
             <tr v-for="item in products" :key="item.id">
-              <td>{{ item.name }}</td>
+              <td>{{ item.name }} <v-btn small :to="{ name: 'product' , params: { id: item.id} }">view</v-btn></td>
               <td>{{ item.price }}</td>
               <td>
                 <v-add v-if="check({ id: item.id})" :product="item" :key="item.id" />

@@ -31,7 +31,6 @@ export const stores = {
                     return true;
                 }
             });
-            console.log(state.products)
             state.products.push({});
             state.products.pop();
         },
