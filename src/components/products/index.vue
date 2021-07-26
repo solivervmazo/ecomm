@@ -12,12 +12,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in products" :key="item.name">
+            <tr v-for="item in products" :key="item.id">
               <td>{{ item.name }}</td>
               <td>{{ item.price }}</td>
               <td>
-                <v-btn>add</v-btn>
-                <v-btn>remove</v-btn>
+                <v-add v-if="check({ id: item.id})" :product="item" :key="item.id" />
+                <v-remove v-else :id="item.id" :key="item.id" />
               </td>
             </tr>
           </tbody>
@@ -28,15 +28,31 @@
 </template>
 
 <script>
+import vAdd from "../cart/add.vue";
+import vRemove from "../cart/remove.vue";
 export default {
+    components:{
+        vAdd, vRemove
+    },
   data() {
     return {
       products: this.$store.getters["products/GET_PRODUCTS"],
+      cart: this.$store.getters["cart/GET_PRODUCTS"],
     };
+  },
+  methods: {
+      check: function( { id = 0 } = {}){
+          if(!id) return;
+          const { cart } = this;
+          return !cart.find(item => item.id == id)
+      }
   },
   computed: {
     _products: function () {
       return this.$store.getters["products/GET_PRODUCTS"];
+    },
+    _cart: function () {
+      return this.$store.getters["cart/GET_PRODUCTS"];
     },
   },
   watch: {
@@ -44,6 +60,14 @@ export default {
       handler: function (newValue) {
         this.$nextTick(() => {
           this.products = newValue;
+        });
+      },
+      deep: true,
+    },
+    _cart: {
+      handler: function (newValue) {
+        this.$nextTick(() => {
+          this.cart = newValue;
         });
       },
       deep: true,
